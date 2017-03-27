@@ -134,12 +134,13 @@ F. Testing the Anaconda Cluster
 ----------------------------
   
 
-  1. Start the cluster and log in to ``master``.  
+1. Start the cluster and log in to ``master``.  
 ::
 
     $ cyclecloud connect master
 
-  2. Create an environment and install BioPython
+
+2. Create an environment and install BioPython
 ::
 
     $ cyclecloud connect -c anaconda-test master
