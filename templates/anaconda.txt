@@ -277,6 +277,9 @@ Autoscale = $Autoscale
         # cyclecloud.cluster.user.password = abc;123
         # cyclecloud.cluster.user.uid = 55555
         # cyclecloud.cluster.user.gid = 55555    
+        [[[cluster-init anaconda:default:1.0.0]]]
+        run_list = recipe[anaconda], recipe[anaconda::shell_conveniences]
+        cyclecloud.test_mode = true
 
     [[node master]]
     MachineType = $MasterMachineType
@@ -285,8 +288,7 @@ Autoscale = $Autoscale
         [[[configuration]]]
         # This is the Chef runlist to use for the node, to customize this add customized recipes and/or roles
         # Example: run_list=role[sge_master_role], role[monitor], recipe[mysql::server]
-        run_list = role[sge_master_role], recipe[anaconda], recipe[anaconda::shell_conveniences]
-        cyclecloud.test_mode = true
+        run_list = role[sge_master_role]
 
         # cycle_server.admin.pass=123456
 
@@ -299,7 +301,6 @@ Autoscale = $Autoscale
         PrivatePort = 8652
         PublicPort = 8652        
 
-				[[[cluster-init anaconda:default:1.0.0]]]
 
 
     [[nodearray execute]]
