@@ -36,17 +36,6 @@ Order = 20
         Config.OS = linux
         DefaultValue = cycle.image.centos7
     
-        [[[parameter ClusterInit]]]
-        Label = Cluster-Init
-        DefaultValue = =undefined
-        Description = "If set, apply a cluster-init configuration.  Leave blank to run without cluster-init."
-        ParameterType = Cloud.ClusterInit
-
-        [[[parameter ChefRepoVersion]]]
-        Label = Custom Chef
-        DefaultValue = =undefined
-        Description = "If set, use a custom chef version from your Locker."
-        ParameterType = Cloud.ChefRepo
         
     [[parameters Node Access]]
     Description = "Specify the credentials required for access to the node.  The Keypair Path specifies the path on local machines for cyclecloud CLI access."
@@ -247,8 +236,6 @@ Autoscale = $Autoscale
     Credentials = $Credentials    
 
     ImageName = $ImageName
-    ClusterInit = $ClusterInit
-    ChefRepoVersion = $ChefRepoVersion
     SubnetId = ${IfThenElse(CloudProvider==="Azure", azureSubnetId, awsSubnetId)}
 	Region = $Region
 
@@ -277,9 +264,10 @@ Autoscale = $Autoscale
         # cyclecloud.cluster.user.password = abc;123
         # cyclecloud.cluster.user.uid = 55555
         # cyclecloud.cluster.user.gid = 55555    
-        [[[cluster-init anaconda:default:1.0.0]]]
-        run_list = recipe[anaconda], recipe[anaconda::shell_conveniences]
+ 
         cyclecloud.test_mode = true
+
+        [[[cluster-init anaconda:default:1.0.0]]]
 
     [[node master]]
     MachineType = $MasterMachineType
@@ -288,7 +276,9 @@ Autoscale = $Autoscale
         [[[configuration]]]
         # This is the Chef runlist to use for the node, to customize this add customized recipes and/or roles
         # Example: run_list=role[sge_master_role], role[monitor], recipe[mysql::server]
-        run_list = role[sge_master_role]
+        run_list = role[sge_master_role], recipe[anaconda], recipe[anaconda::shell_conveniences], recipe[anaconda::jupyter_server]
+        # Define the python packages to include on the master
+        anaconda.packages = astroid, bokeh, blaze
 
         # cycle_server.admin.pass=123456
 
@@ -300,7 +290,6 @@ Autoscale = $Autoscale
         [[[input-endpoint ganglia]]]
         PrivatePort = 8652
         PublicPort = 8652        
-
 
 
     [[nodearray execute]]
@@ -319,7 +308,9 @@ Autoscale = $Autoscale
     Preemptible = ${ifThenElse(Preemptible == true, Preemptible, undefined)}
 
         [[[configuration]]]
-         run_list = role[sge_execute_role]
+        run_list = role[sge_execute_role], recipe[anaconda], recipe[anaconda::shell_conveniences]
+        # Define the python packages to include on the node(s)
+        anaconda.packages = astroid, bokeh, blaze
 
         [[[input-endpoint SSH]]]
         PrivatePort = 22
