@@ -267,8 +267,6 @@ Autoscale = $Autoscale
  
         cyclecloud.test_mode = true
 
-        [[[cluster-init anaconda:default:1.0.0]]]
-
     [[node master]]
     MachineType = $MasterMachineType
     IsReturnProxy = $ReturnProxy
@@ -277,8 +275,6 @@ Autoscale = $Autoscale
         # This is the Chef runlist to use for the node, to customize this add customized recipes and/or roles
         # Example: run_list=role[sge_master_role], role[monitor], recipe[mysql::server]
         run_list = role[sge_master_role], recipe[anaconda], recipe[anaconda::shell_conveniences], recipe[anaconda::jupyter_server]
-        # Define the python packages to include on the master
-        anaconda.packages = astroid, bokeh, blaze
 
         # cycle_server.admin.pass=123456
 
@@ -291,6 +287,7 @@ Autoscale = $Autoscale
         PrivatePort = 8652
         PublicPort = 8652        
 
+        [[[cluster-init anaconda:default:1.0.0]]]
 
     [[nodearray execute]]
     MachineType = $ExecuteMachineType
@@ -309,9 +306,9 @@ Autoscale = $Autoscale
 
         [[[configuration]]]
         run_list = role[sge_execute_role], recipe[anaconda], recipe[anaconda::shell_conveniences]
-        # Define the python packages to include on the node(s)
-        anaconda.packages = astroid, bokeh, blaze
 
         [[[input-endpoint SSH]]]
         PrivatePort = 22
         PublicPort = 55100
+        
+        [[[cluster-init anaconda:default:1.0.0]]]

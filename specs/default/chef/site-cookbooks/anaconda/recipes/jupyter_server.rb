@@ -6,6 +6,13 @@ salt = OpenSSL::Random.random_bytes(salt_len).unpack('H*').first
 encoded_password = OpenSSL::Digest::SHA1.hexdigest(password.force_encoding("utf-8") + salt.encode("ASCII"))
 shadow_hash = 'sha1:' + salt + ':' + encoded_password
 
+directory node['anaconda']['home'] do
+  mode '0755'
+  recursive true
+  owner node['anaconda']['owner']
+  group node['anaconda']['group']
+end
+
 directory "#{node['anaconda']['home']}/.jupyter" do
   mode '0755'
   recursive true
