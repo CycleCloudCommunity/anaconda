@@ -35,7 +35,13 @@ Order = 20
         ParameterType = Cloud.Image
         Config.OS = linux
         DefaultValue = cycle.image.centos7
-    
+
+        [[[parameter CommonChefRepoVersion]]]
+        Label = Common Chef
+        DefaultValue = undefined
+        Description = If set, use a non-default common chef version
+        Hidden = true
+        
         
     [[parameters Node Access]]
     Description = "Specify the credentials required for access to the node.  The Keypair Path specifies the path on local machines for cyclecloud CLI access."
@@ -233,11 +239,14 @@ Autoscale = $Autoscale
     # You can create other nodes like this by adding Abstract = true to them and adding
     # Extends = foo to the nodes that should inherit the definitions from foo.
     [[node defaults]]
+
+    # Chef and Locker Config
+    CommonChefRepoVersion = $CommonChefRepoVersion
     Credentials = $Credentials    
 
     ImageName = $ImageName
     SubnetId = ${IfThenElse(CloudProvider==="Azure", azureSubnetId, awsSubnetId)}
-	Region = $Region
+	 Region = $Region
 
     # EC2
     KeyPair = $awsKeypair
@@ -274,9 +283,10 @@ Autoscale = $Autoscale
         [[[configuration]]]
         # This is the Chef runlist to use for the node, to customize this add customized recipes and/or roles
         # Example: run_list=role[sge_master_role], role[monitor], recipe[mysql::server]
-        run_list = role[sge_master_role], recipe[anaconda], recipe[anaconda::shell_conveniences], recipe[anaconda::jupyter_server]
+        run_list = role[scheduler], recipe[cyclecloud], recipe[cshared::directories], recipe[cuser], recipe[cshared::server], recipe[csge::master], recipe[cycle_server], recipe[cycle_server::xge_plugin], recipe[cycle_server::ganglia_plugin], recipe[cycle_server::chef_plugin], recipe[cycle_server::submit_once_plugin], recipe[cycle_server::file_sync_plugin], recipe[cganglia::server], recipe[anaconda], recipe[anaconda::shell_conveniences], recipe[anaconda::jupyter_server]
 
         # cycle_server.admin.pass=123456
+        cyclecloud.discoverable = true
 
         # Configure Azure external input endpoints (for example SSH)
         [[[input-endpoint SSH]]]
@@ -305,7 +315,7 @@ Autoscale = $Autoscale
     Preemptible = ${ifThenElse(Preemptible == true, Preemptible, undefined)}
 
         [[[configuration]]]
-        run_list = role[sge_execute_role], recipe[anaconda], recipe[anaconda::shell_conveniences]
+        run_list = recipe[cyclecloud], recipe[cshared::client], recipe[cuser], recipe[csge::execute], recipe[cycle_server::submit_once_workers], recipe[cganglia::client], recipe[anaconda], recipe[anaconda::shell_conveniences]
 
         [[[input-endpoint SSH]]]
         PrivatePort = 22
