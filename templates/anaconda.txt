@@ -38,7 +38,6 @@ Order = 20
 
         [[[parameter CommonChefRepoVersion]]]
         Label = Common Chef
-        DefaultValue = undefined
         Description = If set, use a non-default common chef version
         Hidden = true
         
