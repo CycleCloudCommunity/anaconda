@@ -11,10 +11,10 @@ conda config --add channels r
 conda config --add channels bioconda
 
 # Create the default environments
-for PKG in bwa bowtie hisat start; do
+for PKG in bwa bowtie hisat2 star; do
     conda install ${PKG}
 done
 
-conda create -n aligners bwa bowtie hisat star
+conda create -n aligners bwa bowtie hisat2 star
 
 

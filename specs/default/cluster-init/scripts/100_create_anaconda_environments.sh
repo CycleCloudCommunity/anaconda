@@ -12,7 +12,7 @@ source /etc/profile.d/anaconda-env.sh
 
 export ANACONDA_HOME=${ANACONDA_ROOT}/${ANACONDA_VERSION}
 
-if [ ! -f ~/.condarc ]; then
+if [ ! -f ~/.condarc ]  && [ "\$( whoami )" != "root" ]; then
   conda config --add envs_dirs \${HOME}/.conda/envs
 fi
 EOF
