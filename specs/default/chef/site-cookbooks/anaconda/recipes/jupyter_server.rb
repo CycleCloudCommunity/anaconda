@@ -1,6 +1,6 @@
 require 'openssl'
 
-password = node['cyclecloud']['cluster']['user']['password']
+password = node['cyclecloud']['cluster']['user']['password'].dup
 salt_len = 6
 salt = OpenSSL::Random.random_bytes(salt_len).unpack('H*').first
 encoded_password = OpenSSL::Digest::SHA1.hexdigest(password.force_encoding("utf-8") + salt.encode("ASCII"))
@@ -36,11 +36,17 @@ template "#{node['anaconda']['home']}/.jupyter/jupyter_notebook_config.py" do
   )
 end
 
-template '/etc/init.d/jupyter' do
-  source 'sv-jupyter-notebook-initd.erb'
+template '/usr/lib/systemd/system/jupyter.service' do
+  source 'jupyter.service.erb'
   mode '0755'
   owner 'root'
 end
+
+#template '/etc/init.d/jupyter' do
+#  source 'sv-jupyter-notebook-initd.erb'
+#  mode '0755'
+#  owner 'root'
+#end
 
 service 'jupyter' do
   action :start
