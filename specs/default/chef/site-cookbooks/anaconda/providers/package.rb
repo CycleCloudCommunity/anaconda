@@ -1,18 +1,20 @@
+use_inline_resources
+
 def whyrun_supported?
   true
 end
 
 def cmd_conda
-  "#{node["anaconda"]["install_root"]}/#{node["anaconda"]["version"]}/bin/conda"
+  "#{node['anaconda']['install_root']}/#{node['anaconda']['version']}/bin/conda"
 end
 
 def is_installed?(package_name)
-  `"#{cmd_conda}" list`.include?(package_name)
+  Mixlib::ShellOut.new("#{cmd_conda} list").run_command.stdout.include?(package_name)
 end
 
 def log_opts(node)
-  if node["anaconda"]["package_logfile"]
-    "2>&1 >#{node["anaconda"]["package_logfile"]}"
+  if node['anaconda']['package_logfile']
+    "2>&1 >#{node['anaconda']['package_logfile']}"
   else
     ''
   end

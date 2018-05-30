@@ -1,10 +1,87 @@
 # CHANGELOG
 
-## 0.6.3 (in development)
+## 0.7.3 (in development)
 
-fixes:
+## 0.7.2
 
-- fix vagrant-trigger to correctly populate /var/chef/cache on provision
+**This is a backwards-INCOMPATIBLE release**
+
+- Catch up with ipython -> jupyter rebranding: renamed everything to juptyer.
+  This includes directories, attributes, and other backwards-incompatible
+  changes.
+- More fixes to release process: don't include unnecessary files during berkshelf
+  vendoring and release
+- Vagrant and notebook server fixes
+  - you can use attributes to set the notebook server's security token. _Be
+    careful with this config!_ It is disabled in the quickstart Vagrant setup
+    for convenience, and remains _enabled by default_.
+- Foodcritic fixes; resolves:
+  - FC017: LWRP does not notify when updated: anaconda/providers/nbservice.rb:21
+  - FC017: LWRP does not notify when updated: anaconda/providers/package.rb:21
+  - FC017: LWRP does not notify when updated: anaconda/providers/package.rb:58
+  - FC059: LWRP provider does not declare use_inline_resources: anaconda/providers/nbservice.rb:1
+  - FC059: LWRP provider does not declare use_inline_resources: anaconda/providers/package.rb:1
+  - FC048: Prefer Mixlib::ShellOut: ./providers/nbservice.rb:12
+  - FC048: Prefer Mixlib::ShellOut: ./providers/package.rb:12
+
+## 0.7.1
+
+**This cookbook is now up for adoption! See CONTRIBUTING.md for details.**
+
+- Post release cleanup:
+  - release script and better document release process
+  - remove references to Chef DK
+- (WIP!) Update Vagrant instructions:
+  - Use Vagrant 2.0
+  - Update image to use Ubuntu 16.04 LTS (xenial), from 14.04 LTS
+- Lint/Quality
+  - Added CONTRIBUTING.md
+  - Added TESTING.md, and move content from README.md to that file
+  - Remove vim swapfiles from release, because chefignore doesn't seem to do
+    shit.
+- Added checksums for new 5.0 Anaconda installers
+
+## 0.7.0
+
+Many, many changes and fixes to support both the latest Chef version and the
+latest Anaconda versions.
+
+Adds support for Anaconda 4.4.0 and 5.0.1! 5.0.1 is now the default.
+
+### Cookbook changes:
+
+- Adds a `system_path` attribute, for adding Anaconda's bin path to `PATH`.
+
+### Chef changes:
+
+- Dot notation attributes (eg `node.attr1.prop1`) have been deprecated and is
+  now an error; converted everything to hash/bracket notation (eg
+  `node['attr1']['prop1']`).
+- Cleanups to metadata.rb.
+
+### Updated tested list of OSes
+
+The list of tested OSes has been refined to the latest and penultimate (major)
+stable versions. Note that just because an OS is not on the tested list does
+not mean it won't work, it just means it is not part of the official test
+suite. My experience has been it generally will.
+
+- Ubuntu:
+  - Removed tests for: 12.04, 15.04
+  - Added tests for: 16.04
+- Debian:
+  - Removed tests for: 7.8, 8.1
+  - Added tests for: 8.9, 9.1
+- CentOS:
+  - Removed tests for: 5.11, 6.6, 7.1
+  - Added tests for: 6.9, 7.4
+- Red Hat: completed removed from test suite, in favor of CentOS only
+
+### Development, fixes:
+
+- Gemfile now annotated with rvm metadata for ruby version and gemset.
+- Fixed vagrant-trigger to correctly populate /var/chef/cache on provision.
+- Fixed bad call to `Chef::Log` with `fatal`.
 
 ## 0.6.2
 

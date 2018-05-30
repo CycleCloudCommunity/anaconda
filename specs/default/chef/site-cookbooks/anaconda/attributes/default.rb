@@ -1,13 +1,15 @@
 # for miniconda this must be 'latest'
-default[:anaconda][:version] = '4.3.0'
+default['anaconda']['version'] = '5.0.1'
 # the version of python: either 'python2' or 'python3'
-default[:anaconda][:python] = 'python2'
+default['anaconda']['python'] = 'python2'
 # the architecture: nil to autodetect, or either 'x86' or 'x86_64'
-default[:anaconda][:flavor] = nil
+default['anaconda']['flavor'] = nil
 # either 'anaconda' or 'miniconda'
-default[:anaconda][:install_type] = 'anaconda'
+default['anaconda']['install_type'] = 'anaconda'
+# add system-wide path to profile.d?
+default['anaconda']['system_path'] = false
 
-default[:anaconda][:installer_info] = {
+default['anaconda']['installer_info'] = {
   'anaconda' => {
     '2.2.0' => {
       'python2' => {
@@ -33,30 +35,30 @@ default[:anaconda][:installer_info] = {
         'x86_64' => '3be5410b2d9db45882c7de07c554cf4f1034becc274ec9074b23fd37a5c87a6f',
       },
     },
-    '4.2.0' => {
+    '4.4.0' => {
       'python2' => {
         'uri_prefix' => 'https://repo.continuum.io/archive',
-        'x86' => '618b720f309fe8da4f235415f11b6ce3db0a16d702ca67fdceeecf6bec78c32a',
-        'x86_64' => 'beee286d24fb37dd6555281bba39b3deb5804baec509a9dc5c69185098cf661a',
-        },
-      'python3' => {
-        'uri_prefix' => 'https://repo.continuum.io/archive',
-        'x86' => '1a8320635f2f06ec9d8610e77d6d0f9cb2c5d11d20a4ff7fcda113e04b0a8a50',
-        'x86_64' => '73b51715a12b6382dd4df3dd1905b531bd6792d4aa7273b2377a0436d45f0e78',
-        },
+        'x86' => nil,
+        'x86_64' => nil,
       },
-    '4.3.0' => {
+      'python3' => {
+        'uri_prefix' => 'https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com',
+        'x86' => '4cc10d65c303191004ada2b6d75562c8ed84e42bf9871af06440dd956077b555',
+        'x86_64' => '3be5410b2d9db45882c7de07c554cf4f1034becc274ec9074b23fd37a5c87a6f',
+      },
+    },
+    '5.0.1' => {
       'python2' => {
         'uri_prefix' => 'https://repo.continuum.io/archive',
-        'x86' => 'b80d471839e8cf7b100e59308720cc13c141deb1ba903a4776c9a05f613e5078',
-        'x86_64' => '7c52e6e99aabb24a49880130615a48e685da444c3c14eb48d6a65f3313bf745c',
-        },
+        'x86' => '88c8d698fff16af15862daca10e94a0a46380dcffda45f8d89f5fe03f6bd2528',
+        'x86_64' => '23c676510bc87c95184ecaeb327c0b2c88007278e0d698622e2dd8fb14d9faa4',
+      },
       'python3' => {
         'uri_prefix' => 'https://repo.continuum.io/archive',
-        'x86' => 'f7ce2eeec3e42c2ba1ee3b9fcd670478fd30f4be547c6e0a675d183c4ca9dd9b',
-        'x86_64' => 'e9169c3a5029aa820393ac92704eb9ee0701778a085ca7bdc3c57b388ac1beb6',
-        },
+        'x86' => '991a4b656fcb0236864fbb27ff03bb7f3d98579205829b76b66f65cfa6734240',
+        'x86_64' => '55e4db1919f49c92d5abbf27a4be5986ae157f074bf9f8238963cd4582a4068a',
       },
+    },
   },
   'miniconda' => {
     'latest' => {
@@ -75,22 +77,24 @@ default[:anaconda][:installer_info] = {
 }
 
 # specific versions are installed _under_ this directory
-default[:anaconda][:install_root] = '/opt/anaconda'
-default[:anaconda][:accept_license] = 'yes'
-default[:anaconda][:package_logfile] = nil
+default['anaconda']['install_root'] = '/opt/anaconda'
+default['anaconda']['accept_license'] = 'yes'
+default['anaconda']['package_logfile'] = nil
 
-default[:anaconda][:owner] = 'anaconda'
-default[:anaconda][:group] = 'anaconda'
-default[:anaconda][:home] = "/home/#{node["anaconda"]["owner"]}"
+default['anaconda']['owner'] = 'anaconda'
+default['anaconda']['group'] = 'anaconda'
+default['anaconda']['home'] = "/home/#{node['anaconda']['owner']}"
 
-default[:anaconda][:notebook] = {
+default['anaconda']['notebook'] = {
   # by default, listens on all interfaces; there will be a warning since
   # security is disabled
   'ip' => '*',
   'port' => 8888,
-  'owner' => node["anaconda"]["owner"],
-  'group' => node["anaconda"]["group"],
-  'install_dir' => '/opt/ipython/server',
-  'memory' => '20G'
+  'owner' => node['anaconda']['owner'],
+  'group' => node['anaconda']['group'],
+  'install_dir' => '/opt/jupyter/server',
+  # the default is to NOT set the security token, to ensure that a secure key
+  # is chosen and set
+  'use_provided_token' => false,
+  'token' => '',
 }
-

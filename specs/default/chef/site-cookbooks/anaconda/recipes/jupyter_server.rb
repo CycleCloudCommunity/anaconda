@@ -36,17 +36,14 @@ template "#{node['anaconda']['home']}/.jupyter/jupyter_notebook_config.py" do
   )
 end
 
+directory '/usr/lib/systemd/system'
+
 template '/usr/lib/systemd/system/jupyter.service' do
   source 'jupyter.service.erb'
   mode '0755'
   owner 'root'
 end
 
-#template '/etc/init.d/jupyter' do
-#  source 'sv-jupyter-notebook-initd.erb'
-#  mode '0755'
-#  owner 'root'
-#end
 
 service 'jupyter' do
   action :start
