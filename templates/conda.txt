@@ -5,12 +5,12 @@
 [parameters About]
 Order = 1
 
-    [[parameters About Blender]]
+    [[parameters About Anaconda]]
 
-        [[[parameter Blender]]]
+        [[[parameter Conda]]]
         HideLabel = true
         Config.Plugin = pico.widget.HtmlTemplateWidget
-        Config.Template := "<table><tr><td><img src='https://s3.amazonaws.com/download.cyclecomputing.com/logos/anaconda-192x192.png' width='192' height='192'></td></tr><tr><td><p>This cluster installs the Anaconda python environment manager alongside SGE.</p><br><p>See the <a href=\"https://www.anaconda.com/\" target=\"_blank\">Anaconda project site</a> for an overview.</p></td></tr></table>"
+        Config.Template := "<table><tr><td><img src='https://s3.amazonaws.com/download.cyclecomputing.com/logos/anaconda-192x192.png' width='192' height='192'></td></tr><tr><td><p>This cluster installs the Anaconda or Miniconda python environment manager alongside SGE.</p><br><p>See the <a href=\"https://www.anaconda.com/\" target=\"_blank\">Anaconda project site</a> for an overview.</p></td></tr></table>"
 
 
 [parameters General Settings]
@@ -44,10 +44,37 @@ Order = 5
 
 [parameters Cluster Software]
 Order = 20
+
+    [[parameters Anaconda]]
+    Description = Configure default Anaconda Channels, Packages and Environments
+    Order = 10
+    
+
+        [[[parameter UseMiniconda]]]
+        Label = Use Miniconda?
+        DefaultValue = true
+        Widget.Plugin = pico.form.BooleanCheckBox
+        Widget.Label = Install Miniconda instead of the full Anaconda?
+
+        [[[parameter AnacondaChannels]]]
+	Label = Conda Channels
+	Description = Space separated list of conda channels to enable by default
+	DefaultValue = bioconda conda-forge defaults r
+	
+        [[[parameter AnacondaPackages]]]
+	Label = Conda Packages
+	Description = Space separated list of conda packages to install by default
+
+        [[[parameter AnacondaEnvironments]]]
+	Label = Conda Environments
+	Description = Space separated list of conda environment yml files to install from <locker>/blobs/
+
+	
+
     
     [[parameters Software]]
     Description = Specify the base OS and optional cluster-init spec(s) from your locker.
-    Order = 10
+    Order = 20
 
 
         [[[parameter ClusterUserName]]]
@@ -162,7 +189,7 @@ Order = 40
 
 
 
-[cluster Miniconda]
+[cluster conda]
 FormLayout = selectionpanel
 IconUrl = https://s3.amazonaws.com/download.cyclecomputing.com/logos/anaconda-192x192.png
 
@@ -190,7 +217,15 @@ Autoscale = $Autoscale
         cyclecloud.cluster.user.gid = 55555
         cyclecloud.cluster.user.public_key = $ClusterUserPubKey
 
-        anaconda.install_type = miniconda
+
+        [[[configuration anaconda]]]
+        install_type = ${UseMiniconda ? "miniconda" : "anaconda"}
+        version = 5.0.1
+        python = python2
+        channels = $AnacondaChannels
+        packages = $AnacondaPackages
+        env_files = $AnacondaEnvironments
+
 
         [[[network-interface eth0]]]
         AssociatePublicIpAddress = false
