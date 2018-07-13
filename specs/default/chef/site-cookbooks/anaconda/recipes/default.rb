@@ -193,6 +193,9 @@ file '/etc/profile.d/anaconda.sh' do
   only_if { node['anaconda']['system_path'] }
 end
 
-bash 'ensure conda binaries are executable' do
-  code "chmod a+rx #{anaconda_install_dir}/bin/*"
+defer_block 'Defer until after all anaconda cookbooks run' do
+  bash 'ensure conda binaries are executable' do
+    code "chmod a+rx #{anaconda_install_dir}/bin/* && chown -R #{node['anaconda']['owner']}:#{node['anaconda']['group']} #{anaconda_install_dir}/bin"
+  end
 end
+

@@ -57,17 +57,17 @@ Order = 20
         Widget.Label = Install Miniconda instead of the full Anaconda?
 
         [[[parameter AnacondaChannels]]]
-	Label = Conda Channels
-	Description = Space separated list of conda channels to enable by default
-	DefaultValue = bioconda conda-forge defaults r
-	
+        Label = Conda Channels
+        Description = Space separated list of conda channels to enable by default
+        DefaultValue = bioconda conda-forge defaults r
+
         [[[parameter AnacondaPackages]]]
-	Label = Conda Packages
-	Description = Space separated list of conda packages to install by default
+        Label = Conda Packages
+        Description = Space separated list of conda packages to install by default
 
         [[[parameter AnacondaEnvironments]]]
-	Label = Conda Environments
-	Description = Space separated list of conda environment yml files to install from <locker>/blobs/
+        Label = Conda Environments
+        Description = Space separated list of conda environment yml files to install from <locker>/blobs/
 
 	
 
