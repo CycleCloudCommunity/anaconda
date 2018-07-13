@@ -26,7 +26,7 @@ Autoscale = $Autoscale
         packages = $AnacondaPackages
         env_files = $AnacondaEnvironments
 
-        [[[cluster-init anaconda:default:1.0.1]]]
+        [[[cluster-init cyclecloud/anaconda:default:1.0.1]]]
 
     [[node master]]
     MachineType = $MasterMachineType
