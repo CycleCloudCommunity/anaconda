@@ -86,11 +86,11 @@ To import the cluster:
 
   2. Switch to the Anaconda directory.
 
-  3. Run ``cyclecloud import_template Anaconda -f templates/anaconda.txt``.  The
+  3. Run ``cyclecloud import_template SGE-Anaconda -f templates/sge-anaconda.txt``.  The
      expected output looks like this:::
 
-       $ cyclecloud import_template Anaconda -f templates/anaconda.txt
-       Importing template Anaconda....
+       $ cyclecloud import_template SGE-Anaconda -f templates/sge-anaconda.txt
+       Importing template SGE-Anaconda....
        ----------------------
        Anaconda : *template*
        ----------------------
@@ -110,7 +110,7 @@ D. Creating a Anaconda Cluster
 
   3. Click the **"+"** button in the "Clusters" frame to create a new cluster.
 
-  4. In the cluster creation page, click on the **Anaconda** cluster icon.
+  4. In the cluster creation page, click on the **SGE-Anaconda** cluster icon.
 
   5. At a minimum, select the Cloud Provider Credentials to use and enter a Name
      for the cluster.
@@ -145,8 +145,6 @@ F. Testing the Anaconda Cluster
 
     $ cyclecloud connect -c anaconda-test master
     [cyclecloud@ip-10-142-234-201 ~]$ conda create --name snowflakes biopython
-    -bash-4.1$ cd /opt/spark/current/examples/src/main/python
-    -bash-4.1$ /opt/spark/current/bin/spark-submit pi.py
-    [cyclecloud@ip-10-142-234-201 ~]$ source activate snowflakes
+    [cyclecloud@ip-10-142-234-201 ~]$ activate snowflakes
 
 

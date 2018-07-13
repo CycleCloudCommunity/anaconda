@@ -2,7 +2,7 @@
 ## Anaconda with SGE
 ############################
 
-[cluster Anaconda]
+[cluster SGE-Anaconda]
 FormLayout = selectionpanel
 IconUrl = https://github.com/CycleCloudCommunity/anaconda/raw/master/icon.png
 Category = Applications
