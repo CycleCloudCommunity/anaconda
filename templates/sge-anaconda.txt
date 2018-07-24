@@ -20,13 +20,12 @@ Autoscale = $Autoscale
     
         [[[configuration anaconda]]]
         install_type = ${UseMiniconda ? "miniconda" : "anaconda"}
-        version = 5.0.1
         python = $AnacondaPythonVersion
         channels = $AnacondaChannels
         packages = $AnacondaPackages
         env_files = $AnacondaEnvironments
 
-        [[[cluster-init cyclecloud/anaconda:default:1.0.1]]]
+        [[[cluster-init anaconda:default:1.0.1]]]
 
     [[node master]]
     MachineType = $MasterMachineType
