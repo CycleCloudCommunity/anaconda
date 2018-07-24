@@ -4,9 +4,7 @@ set -x
 
 source /etc/profile.d/anaconda-env.sh
 
-ANACONDA_ROOT=$( jetpack config anaconda.install_root )
-ANACONDA_VERSION=$( jetpack config anaconda.version )
-ANACONDA_HOME=${ANACONDA_ROOT}/${ANACONDA_VERSION}
+ANACONDA_HOME=$( jetpack config anaconda.home )
 
 
 ANACONDA_CHANNELS=$( jetpack config anaconda.channels )

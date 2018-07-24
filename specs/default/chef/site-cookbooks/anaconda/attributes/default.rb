@@ -1,34 +1,18 @@
-# for miniconda this must be 'latest'
-default['anaconda']['version'] = '5.0.1'
-# the version of python: either 'python2' or 'python3'
-default['anaconda']['python'] = 'python2'
-# the architecture: nil to autodetect, or either 'x86' or 'x86_64'
-default['anaconda']['flavor'] = nil
-# either 'anaconda' or 'miniconda'
 default['anaconda']['install_type'] = 'anaconda'
-# add system-wide path to profile.d?
-default['anaconda']['system_path'] = false
+default['anaconda']['version'] = (node['anaconda']['install_type'] == "miniconda") ? 'latest' : '5.2.0'
+default['anaconda']['home'] = "/opt/#{node['anaconda']['install_type']}/#{node['anaconda']['version']}"
+default['anaconda']['python'] = 'python2'  # Allowed: ['2', 'python2', '3', 'python3']
 
 
-# specific versions are installed _under_ this directory
-default['anaconda']['install_root'] = "/opt/#{node['anaconda']['install_type']}"
-default['anaconda']['accept_license'] = 'yes'
-default['anaconda']['package_logfile'] = nil
+# For latest URLs See:
+#          https://www.anaconda.com/download/#linux
+#          https://conda.io/miniconda.html
+#
+# The current project defaults to these urls:
+#          https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh
+#          https://repo.anaconda.com/archive/Anaconda2-5.2.0-Linux-x86_64.sh
+#          https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.shh
+#          https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
+default['anaconda']['platform'] = 'Linux-x86_64'
+default['anaconda']['base_url'] = (node['anaconda']['install_type'] == "miniconda") ? 'https://repo.continuum.io/miniconda' : 'https://repo.anaconda.com/archive'
 
-default['anaconda']['owner'] = 'anaconda'
-default['anaconda']['group'] = 'anaconda'
-default['anaconda']['home'] = "/home/#{node['anaconda']['owner']}"
-
-default['anaconda']['notebook'] = {
-  # by default, listens on all interfaces; there will be a warning since
-  # security is disabled
-  'ip' => '*',
-  'port' => 8888,
-  'owner' => node['anaconda']['owner'],
-  'group' => node['anaconda']['group'],
-  'install_dir' => '/opt/jupyter/server',
-  # the default is to NOT set the security token, to ensure that a secure key
-  # is chosen and set
-  'use_provided_token' => false,
-  'token' => '',
-}
